@@ -270,9 +270,6 @@ def set_jvm_memory(m2ee_section, vcap, java_version):
                 )
             )
     javaopts = m2ee_section['javaopts']
-
-    #Extremely dirty, ill-placed hack to get SSL debugging (CWA)
-    javaopts.append('java -Djavax.net.debug=ssl')
     
     javaopts.append('-Xmx%s' % heap_size)
     javaopts.append('-Xms%s' % heap_size)
