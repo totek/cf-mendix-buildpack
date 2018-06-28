@@ -508,7 +508,9 @@ class M2EEConfig:
         """
         cmd = []
         cmd.append(self._conf['m2ee'].get('javabin', 'java'))
-
+        #extra SSL Debugging 
+        cmd.append('-Djavax.net.debug=all')
+        
         if 'javaopts' in self._conf['m2ee']:
             if isinstance(self._conf['m2ee']['javaopts'], list):
                 cmd.extend(self._conf['m2ee']['javaopts'])
