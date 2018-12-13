@@ -246,10 +246,7 @@ def compile(install_path, cache_dir):
         cache_dir=cache_dir,
     )
 
-    buildpackutil.download_and_unpack(
-        buildpackutil.get_blobstore_url(
-            "/mx-buildpack/telegraf-1.7.1_linux_amd64.tar.gz"
-        ),
+    buildpackutil.download_and_unpack("https://dl.influxdata.com/telegraf/nightlies/telegraf-nightly_linux_amd64.tar.gz",
         install_path,
         cache_dir=cache_dir,
     )
