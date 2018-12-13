@@ -33,8 +33,12 @@ def _get_appmetrics_prometheus():
     return os.getenv("APPMETRICS_PROMETHEUS")
 
 
+def _get_appmetrics_aai():
+    return os.getenv("APPMETRICS_AAI")
+
+
 def is_enabled():
-    return _get_appmetrics_target() is not None or _get_appmetrics_prometheus() is not None
+    return _get_appmetrics_target() is not None or _get_appmetrics_prometheus() is not None or _get_appmetrics_aai() is not None
 
 
 def _is_installed():
@@ -143,6 +147,15 @@ def _write_prometheus_output_config():
     }
 
     _write_config("[[outputs.prometheus_client]]", prometheus_output)
+    
+def _write_aai_output_config():
+    logger.debug("writing aai output config")
+    aai_output = {
+        "instrumentation_key": _get_appmetrics_aai(),
+    }
+
+    
+    _write_config("[[outputs.application_insights]]", aai_output)
 
 
 def update_config(m2ee, app_name):
@@ -198,6 +211,10 @@ def update_config(m2ee, app_name):
     if _get_appmetrics_prometheus is not None:
         _write_prometheus_output_config()
 
+    # Expose metrics to Azure Application Insights when enabled
+    if _get_appmetrics_aai is not None:
+        _write_aai_output_config()
+        
     # # Write http_outputs (one or array)
     if _get_appmetrics_target is not None:
         try:
