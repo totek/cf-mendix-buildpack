@@ -103,7 +103,6 @@ def _write_config_in_fd(section, config, fd, indent=""):
 
     print("", file=fd)
 
-
 def _write_http_output_config(http_config):
     logger.debug("writing http output config")
     if "url" not in http_config:
@@ -154,9 +153,23 @@ def _write_aai_output_config():
         "instrumentation_key": _get_appmetrics_aai(),
     }
 
-    
     _write_config("[[outputs.application_insights]]", aai_output)
 
+
+def _write_mendix_admin_http_input_config(action, metric_prefix, query, fields):
+    mxpassword = os.getenv("ADMIN_PASSWORD")
+    mxpassword64 = base64.b64encode(mxpassword.encode()).decode("ascii")
+    http_input = {
+        "urls": ["http://localhost:82/_mxadmin"],
+        "method": "POST",
+        "[inputs.http.headers]": {"Content-Type": "application/json", "X-M2EE-Authentication":  mxpassword64 },
+        "data_format": "json",
+        "name_override": metric_prefix,
+        "body": "{\\\"action\\\" : \\\"" + action + "\\\", \\\"params\\\":{} }",
+        "json_query": query,
+        "fieldpass": fields
+    }
+    _write_config("[[inputs.http]]", http_input)
 
 def update_config(m2ee, app_name):
     if not is_enabled() or not _is_installed():
@@ -214,7 +227,14 @@ def update_config(m2ee, app_name):
     # Expose metrics to Azure Application Insights when enabled
     if _get_appmetrics_aai is not None:
         _write_aai_output_config()
-        
+    
+    _write_mendix_admin_http_input_config("runtime_statistics", "mendix_memory", "feedback.memory", ["used_heap", "committed_heap", "init_heap", "max_heap", "used_nonheap", "committed_nonheap", "init_nonheap", "max_nonheap"])
+    _write_mendix_admin_http_input_config("runtime_statistics", "mendix_connectionbus", "feedback.connectionbus", ["select", "insert", "update", "delete", "transaction"])
+    _write_mendix_admin_http_input_config("runtime_statistics", "mendix_sessions", "feedback.sessions", ["named_users", "anonymous_sessions", "named_user_sessions"])
+    _write_mendix_admin_http_input_config("server_statistics", "mendix_threads", "feedback.threadpool", ["threads"])
+    _write_mendix_admin_http_input_config("server_statistics", "mendix_connections", "feedback.jetty", ["current_connections"])
+    _write_mendix_admin_http_input_config("get_logged_in_user_names", "mendix_loggedinusers", "feedback", ["count"])
+
     # # Write http_outputs (one or array)
     if _get_appmetrics_target is not None:
         try:
