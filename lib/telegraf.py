@@ -228,12 +228,12 @@ def update_config(m2ee, app_name):
     if _get_appmetrics_aai is not None:
         _write_aai_output_config()
     
-    _write_mendix_admin_http_input_config("runtime_statistics", "mendix_memory", "feedback.memory", ["used_heap", "committed_heap", "init_heap", "max_heap", "used_nonheap", "committed_nonheap", "init_nonheap", "max_nonheap"])
-    _write_mendix_admin_http_input_config("runtime_statistics", "mendix_connectionbus", "feedback.connectionbus", ["select", "insert", "update", "delete", "transaction"])
-    _write_mendix_admin_http_input_config("runtime_statistics", "mendix_sessions", "feedback.sessions", ["named_users", "anonymous_sessions", "named_user_sessions"])
-    _write_mendix_admin_http_input_config("server_statistics", "mendix_threads", "feedback.threadpool", ["threads"])
-    _write_mendix_admin_http_input_config("server_statistics", "mendix_connections", "feedback.jetty", ["current_connections"])
-    _write_mendix_admin_http_input_config("get_logged_in_user_names", "mendix_loggedinusers", "feedback", ["count"])
+    _write_mendix_admin_http_input_config("runtime_statistics", "runtime_memory", "feedback.memory", ["used_heap", "committed_heap", "init_heap", "max_heap", "used_nonheap", "committed_nonheap", "init_nonheap", "max_nonheap"])
+    _write_mendix_admin_http_input_config("runtime_statistics", "runtime_connectionbus", "feedback.connectionbus", ["select", "insert", "update", "delete", "transaction"])
+    _write_mendix_admin_http_input_config("runtime_statistics", "runtime_sessions", "feedback.sessions", ["named_users", "anonymous_sessions", "named_user_sessions"])
+    _write_mendix_admin_http_input_config("server_statistics", "runtime_threads", "feedback.threadpool", ["threads"])
+    _write_mendix_admin_http_input_config("server_statistics", "runtime_connections", "feedback.jetty", ["current_connections"])
+    _write_mendix_admin_http_input_config("get_logged_in_user_names", "runtime_loggedinusers", "feedback", ["count"])
 
     # # Write http_outputs (one or array)
     if _get_appmetrics_target is not None:
