@@ -221,11 +221,11 @@ def update_config(m2ee, app_name):
         _write_config("[[outputs.datadog]]", {"apikey": datadog.get_api_key()})
 
     # Expose metrics with Prometheus Client Serice when enabled
-    if _get_appmetrics_prometheus is not None:
+    if _get_appmetrics_prometheus() is not None:
         _write_prometheus_output_config()
 
     # Expose metrics to Azure Application Insights when enabled
-    if _get_appmetrics_aai is not None:
+    if _get_appmetrics_aai() is not None:
         _write_aai_output_config()
     
     _write_mendix_admin_http_input_config("runtime_statistics", "runtime_memory", "feedback.memory", ["used_heap", "committed_heap", "init_heap", "max_heap", "used_nonheap", "committed_nonheap", "init_nonheap", "max_nonheap"])
@@ -236,7 +236,7 @@ def update_config(m2ee, app_name):
     _write_mendix_admin_http_input_config("get_logged_in_user_names", "runtime_loggedinusers", "feedback", ["count"])
 
     # # Write http_outputs (one or array)
-    if _get_appmetrics_target is not None:
+    if _get_appmetrics_target() is not None:
         try:
             http_configs = json.loads(_get_appmetrics_target())
         except TypeError as e:
