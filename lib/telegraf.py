@@ -37,7 +37,7 @@ def _get_appmetrics_aai():
     return os.getenv("APPMETRICS_AAI")
 
 def _get_graylog_instances():
-    return os.getenv("GRAYLOG_INSTANCES")
+    return os.getenv("APPMETRICS_GRAYLOG")
 
 def is_enabled():
     return _get_appmetrics_target() is not None or _get_appmetrics_prometheus() is not None or _get_appmetrics_aai() is not None  or _get_graylog_instances() is not None
