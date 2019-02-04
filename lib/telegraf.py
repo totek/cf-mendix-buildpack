@@ -291,7 +291,7 @@ def run():
 
     if not _is_installed():
         logger.warn(
-            "Telegraf isn't installed yet but APPMETRICS_TARGET is set. "
+            "Telegraf isn't installed, but a Telegraf configuration environment variable has been set. "
             + "Please push or restage your app to complete Telegraf installation."
         )
         return
