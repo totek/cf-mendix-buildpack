@@ -36,9 +36,11 @@ def _get_appmetrics_prometheus():
 def _get_appmetrics_aai():
     return os.getenv("APPMETRICS_AAI")
 
+def _get_graylog_intances()
+    return os.getenv("GRAYLOG_INSTANCES")
 
 def is_enabled():
-    return _get_appmetrics_target() is not None or _get_appmetrics_prometheus() is not None or _get_appmetrics_aai() is not None
+    return _get_appmetrics_target() is not None or _get_appmetrics_prometheus() is not None or _get_appmetrics_aai() is not None  or _get_graylog_instances() is not None
 
 
 def _is_installed():
@@ -155,6 +157,13 @@ def _write_aai_output_config():
 
     _write_config("[[outputs.application_insights]]", aai_output)
 
+def _write_graylog_output_config():
+    logger.debug("writing graylog output config")
+    graylog_output = {
+        "listen": ":9273",
+    }
+
+    _write_config("[[outputs.graylog]]", graylog_output)
 
 def _write_mendix_admin_http_input_config(action, metric_prefix, query, fields):
     mxpassword = os.getenv("ADMIN_PASSWORD")
@@ -227,6 +236,10 @@ def update_config(m2ee, app_name):
     # Expose metrics to Azure Application Insights when enabled
     if _get_appmetrics_aai() is not None:
         _write_aai_output_config()
+
+     # Expose metrics to Graylog when enabled
+    if _get_graylog_instances() is not None:
+        _write_graylog_output_config()
     
     _write_mendix_admin_http_input_config("runtime_statistics", "runtime_memory", "feedback.memory", ["used_heap", "committed_heap", "init_heap", "max_heap", "used_nonheap", "committed_nonheap", "init_nonheap", "max_nonheap"])
     _write_mendix_admin_http_input_config("runtime_statistics", "runtime_connectionbus", "feedback.connectionbus", ["select", "insert", "update", "delete", "transaction"])
