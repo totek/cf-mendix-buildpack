@@ -36,7 +36,7 @@ def _get_appmetrics_prometheus():
 def _get_appmetrics_aai():
     return os.getenv("APPMETRICS_AAI")
 
-def _get_graylog_intances()
+def _get_graylog_intances():
     return os.getenv("GRAYLOG_INSTANCES")
 
 def is_enabled():
