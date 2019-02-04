@@ -36,7 +36,7 @@ def _get_appmetrics_prometheus():
 def _get_appmetrics_aai():
     return os.getenv("APPMETRICS_AAI")
 
-def _get_graylog_intances():
+def _get_graylog_instances():
     return os.getenv("GRAYLOG_INSTANCES")
 
 def is_enabled():
@@ -160,7 +160,8 @@ def _write_aai_output_config():
 def _write_graylog_output_config():
     logger.debug("writing graylog output config")
     graylog_output = {
-        "servers": _get_graylog_instances(),
+        "servers": _
+        (),
     }
 
     _write_config("[[outputs.graylog]]", graylog_output)
