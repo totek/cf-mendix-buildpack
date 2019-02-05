@@ -160,7 +160,7 @@ def _write_aai_output_config():
 def _write_graylog_output_config():
     logger.debug("writing graylog output config")
     graylog_output = {
-        "servers": _get_graylog_instances(),
+        "servers": _get_graylog_instances().split(','),
     }
 
     _write_config("[[outputs.graylog]]", graylog_output)
