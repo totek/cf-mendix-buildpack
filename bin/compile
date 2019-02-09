@@ -109,18 +109,21 @@ def check_database_environment_variable():
 
 
 def set_up_java():
-    logging.debug('begin download and install java')
-    buildpackutil.mkdir_p(os.path.join(DOT_LOCAL_LOCATION, 'bin'))
-    jvm_location = buildpackutil.ensure_and_get_jvm(
-        get_runtime_version(), CACHE_DIR, DOT_LOCAL_LOCATION, package='jre'
-    )
+    logging.debug('skipping java install for PI')
+    #logging.debug('begin download and install java')
+    #buildpackutil.mkdir_p(os.path.join(DOT_LOCAL_LOCATION, 'bin'))
+    #skip getting JVM, already in Docker image for PI
+    #jvm_location = buildpackutil.ensure_and_get_jvm(
+    #    get_runtime_version(), CACHE_DIR, DOT_LOCAL_LOCATION, package='jre'
+    #)
     # create a symlink in .local/bin/java
-    os.symlink(
+    #Skip symlink creation for PI
+    #os.symlink(
         # use .. when jdk is in .local because absolute path is different at staging time
-        os.path.join(jvm_location.replace(DOT_LOCAL_LOCATION, '..'), 'bin', 'java'),
-        os.path.join(DOT_LOCAL_LOCATION, 'bin', 'java')
-    )
-    logging.debug('end download and install java')
+    #    os.path.join(jvm_location.replace(DOT_LOCAL_LOCATION, '..'), 'bin', 'java'),
+    #    os.path.join(DOT_LOCAL_LOCATION, 'bin', 'java')
+    #)
+    #logging.debug('end download and install java')
 
 
 def preflight_check():
