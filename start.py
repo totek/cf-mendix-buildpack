@@ -350,10 +350,10 @@ def set_jvm_memory(m2ee_section, vcap, java_version):
     javaopts.append("-Xmx%s" % heap_size)
     javaopts.append("-Xms%s" % heap_size)
 
-    if java_version.startswith("7"):
+    #if java_version.startswith("7"):
         #No Maxmetaspace on PI
         #javaopts.append("-XX:MaxPermSize=256M")
-    else:
+    #else:
         #No Maxmetaspace on PI
         #javaopts.append("-XX:MaxMetaspaceSize=256M")
 
