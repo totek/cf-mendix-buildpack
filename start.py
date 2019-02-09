@@ -1248,14 +1248,14 @@ if __name__ == "__main__":
 
     try:
         service_backups()
-        set_up_nginx_files(m2ee)
+#        set_up_nginx_files(m2ee)
         telegraf.run()
         datadog.run()
         complete_start_procedure_safe_to_use_for_restart(m2ee)
         set_up_instadeploy_if_deploy_password_is_set(m2ee)
         start_metrics(m2ee)
         start_logging_heartbeat()
-        start_nginx()
+#        start_nginx()
         loop_until_process_dies(m2ee)
     except Exception:
         x = traceback.format_exc()
