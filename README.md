@@ -62,6 +62,14 @@ Now we need to push the application once more.
 
 You can now log in to your application with the configured admin password.
 
+For PostgreSQL we support setting additional parameters in the connection uri retrieved from the VCAP. To set additional JDBC parameters set the `DATABASE_CONNECTION_PARAMS` environment variable as JSON key-value string.
+
+```
+cf set-env <YOUR_APP> DATABASE_CONNECTION_PARAMS '{"tcpKeepAlive": "true", "connectionTimeout": 30, "loginTimeout": 15}'
+```
+
+Note: if you set `DATABASE_URL` provide it as JDBC connection string (prefixed with `jdbc:` and including parameters, `DATABASE_CONNECTION_PARAMS` is not needed then.
+
 
 ### Configuring Constants
 
@@ -358,11 +366,38 @@ If you use the `cf push` commands as described above, you will always use the la
 
 However, if you need to exercise a high degree of control over your deployments, it is possible to pin a specific version of the buildpack. This will prevent you from being affected by bugs that are inadvertently introduced, but you will need to set up a procedure to regularly move to new versions of the buildpack.
 
-To push with a specific version of the buildpack, append `#<tag>` to the buildpack URL in your `cf push` command like so: 
+To push with a specific version of the buildpack, append `#<tag>` to the buildpack URL in your `cf push` command like so:
 
     cf push <YOUR_APP> -b https://github.com/mendix/cf-mendix-buildpack#v1.9.2 -p <YOUR_MDA>.mda -t 180
 
 You can find the list of available tags here: https://github.com/mendix/cf-mendix-buildpack/tags
+
+
+Troubleshooting (Rescue mode)
+====
+
+Sometimes the app won't run because it exits with status code 143. Or, for any reason, the app is unable to start, leaving you unable to debug the issue from within the container. For these cases we have introduced a `DEBUG_CONTAINER` mode. To enable it:
+
+```
+cf set-env <YOUR_APP> DEBUG_CONTAINER true
+cf restart <YOUR_APP>
+```
+
+Now your app will start in CloudFoundry (n.b. - the Mendix Runtime will not start yet) and you can troubleshoot the problem with:
+```
+cf ssh <YOUR_APP>
+export HOME=$HOME/app # this should not be needed but for now it is
+export DEBUG_CONTAINER=false # while we are in the container turn it off, we could try to make this optional by detecting other environment variables that are present over ssh but not regular start
+export PORT=1234 # so that nginx can start correctly
+cd app
+python3 start.py
+```
+
+After you are done, you can disable debug mode with:
+```
+cf unset-env <YOUR_APP> DEBUG_CONTAINER
+cf restart <YOUR_APP>
+```
 
 
 Contributing
@@ -373,3 +408,8 @@ Make sure your code complies with pep8 and that no pyflakes errors/warnings are 
 Rebase your git history in such a way that each commit makes one consistent change. Don't include separate "fixup" commits later on.
 
 For new code changes going live, the version has to bumped at the top of `start.py`, and a new tag with that version number needs to be pushed to github.
+
+License
+====
+
+This project is licensed under the Apache License v2 (for details, see the [LICENSE](LICENSE) file).
