@@ -47,6 +47,14 @@ def _is_installed():
     return os.path.exists(".local/telegraf/usr/bin/telegraf")
 
 
+def get_nginx_port():
+    return int(os.environ["PORT"])
+
+
+def get_admin_port():
+    return get_nginx_port() + 2
+
+
 def _get_tags():
     # Telegraf tags must be key / value
     tags = {}
@@ -168,8 +176,9 @@ def _write_graylog_output_config():
 def _write_mendix_admin_http_input_config(action, metric_prefix, query, fields):
     mxpassword = os.getenv("ADMIN_PASSWORD")
     mxpassword64 = base64.b64encode(mxpassword.encode()).decode("ascii")
+    admin_port = get_admin_port()
     http_input = {
-        "urls": ["http://localhost:82/_mxadmin"],
+        "urls": ["http://localhost:" + admin_port + "/_mxadmin"],
         "method": "POST",
         "[inputs.http.headers]": {"Content-Type": "application/json", "X-M2EE-Authentication":  mxpassword64 },
         "data_format": "json",
