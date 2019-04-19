@@ -330,7 +330,7 @@ def ensure_and_get_mono(mx_version, cache_dir):
         logging.debug("Mono not found in default locations")
         download_and_unpack(
             #get_blobstore_url("/mx-buildpack/" + mono_version + "-mx.tar.gz"),
-            "https://mxblobstore.azureedge.net/mxblobstore/mono-4.6.2.16-mx-bionic.tar.gz",
+             "https://mxblobstore.azureedge.net/mxblobstore/" + mono_version + "-mx-bionic.tar.gz",
             os.path.join(fallback_location, mono_version),
             cache_dir,
         )
