@@ -179,7 +179,7 @@ def _write_mendix_admin_http_input_config(action, metric_prefix, query, fields):
     admin_port = get_admin_port()
     http_input = {
         #"urls": ["http://localhost:" + admin_port + "/_mxadmin"],
-        "urls": ["http://localhost:82/_mxadmin"],
+        "urls": ["http://localhost:8082/_mxadmin"],
         "method": "POST",
         "[inputs.http.headers]": {"Content-Type": "application/json", "X-M2EE-Authentication":  mxpassword64 },
         "data_format": "json",
