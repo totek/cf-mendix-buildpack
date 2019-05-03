@@ -128,7 +128,7 @@ def mkdir_p(path):
 
 def get_buildpack_loglevel():
     if os.getenv("BUILDPACK_XTRACE", "false") == "true":
-        return logging.DEBUG
+        return logging.TRACE
     else:
         return logging.INFO
 
