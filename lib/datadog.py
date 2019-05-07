@@ -97,7 +97,7 @@ def update_config(m2ee, app_name):
                 "name": "DataDogSubscriber",
                 "autosubscribe": "INFO",
                 "host": "localhost",
-                "port": 9032,
+                "port": "9032",
             }
         )
     enable_runtime_agent(m2ee)
