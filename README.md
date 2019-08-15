@@ -54,7 +54,12 @@ In our trial we found the service `elephantsql` which offered the free `turtle` 
 
     cf bind-service <YOUR_APP> <SERVICE_NAME>
 
-Note that not all databases are automatically picked up by the buildpack. If `cf push` returns an error like `Could not parse database credentials`, you need to set the `DATABASE_URL` variable manually using the details included in the service.
+Note that not all databases are automatically picked up by the buildpack. If `cf push` returns an error like `Could not parse database credentials`, you need to set the `DATABASE_URL` variable manually or set database [Mendix custom runtime variables](https://docs.mendix.com/refguide/custom-settings) to configure a database. Note these variables need to be prefixed with `MXRUNTIME_`, as per example:
+
+    cf set-env <YOUR_APP> MXRUNTIME_DatabaseType PostgreSQL
+    cf set-env <YOUR_APP> MXRUNTIME_DatabaseJdbcUrl postgres://host/databasename
+    cf set-env <YOUR_APP> MXRUNTIME_DatabaseUsername user
+    cf set-env <YOUR_APP> MXRUNTIME_DatabasePassword password
 
 Now we need to push the application once more.
 
@@ -128,9 +133,20 @@ The Java heap size is configured automatically based on best practices. You can 
 
 ### Configuring the Java version
 
-The default Java version is 8 for Mendix 5.18 and higher. If you want to force Java 7 or 8, you can set the environment variable `JAVA_VERSION` to `7` or `8`.
+The build pack will automatically determine the Java version to use based on the runtime version of the app being deployed. The default Java version is 8 for Mendix 5.18 and higher. For Mendix 8 and above the default Java version is 11. In most cases it is not needed to change the Java version determined by the build pack.
+
+*Note*: Starting from Mendix 7.23.1 we changed to use AdoptOpenJDK. The buildpack will automatically determine the vendor based on the Mendix version. The `JAVA_VERSION` variable can be used to select a version number only, not the vendor.
+
+**For Mendix 5** the major java version can be changed by setting `JAVA_VERSION`.  
+For all other versions **the major version number should be respected** and the `JAVA_VERSION` can be used to switch to a different patch version. 
+
+If you want to force Java 7 or 8, you can set the environment variable `JAVA_VERSION` to `7` or `8`:
 
     cf set-env <YOUR_APP> JAVA_VERSION 8
+    
+Or to switch patch version for Java 11:
+
+	cf set-env <YOUR_APP> JAVA_VERSION 11.0.3
 
 
 ### Configuring Custom Runtime Settings
@@ -405,7 +421,22 @@ cf restart <YOUR_APP>
 Contributing
 ====
 
-Make sure your code complies with pep8 and that no pyflakes errors/warnings are present.
+Make sure your code complies with PEP8. Make sure your code is styled using [Black](https://github.com/psf/black).
+We enforce this using `flake8` and `black` in our travis CI.
+
+This simplest way to use these tools is by installing them as a plugin for
+your editor; for example in Vim, one can auto-format files with `black` on writing out a buffer, and it will also display `flake8` errors.
+
+Should you prefer using the tools manually, you can invoke them using `make lint`.
+It is important to note that `black` requires a Python version > 3.6 to run, whilst the cf-mendix-buildpack currently targets
+Python 3.4.3. We aim to resolve this discrepancy soon, by making the cf-mendix-buildpack target a Python version > 3.6.
+
+In the meantime, we suggest that you run linting tools in a separate virtualenv that you use for testing/developing the buildpack.
+
+To install only the linting requirements:
+```
+pip3 install -r tests/requirements_lint.txt
+```
 
 Rebase your git history in such a way that each commit makes one consistent change. Don't include separate "fixup" commits later on.
 
