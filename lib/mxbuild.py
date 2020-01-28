@@ -26,6 +26,7 @@ def start_mxbuild_server(dot_local_location, mx_version):
             "--serve",
             "--enable-call-microflow-from-nanoflow",
             "--enable-native-layout-type",
+            "--native-packager",
             "--port=6666",
             "--java-home=%s" % jvm_location,
             "--java-exe-path=%s/bin/java" % jvm_location,
