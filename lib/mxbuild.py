@@ -23,7 +23,7 @@ def start_mxbuild_server(dot_local_location, mx_version):
             "--config",
             os.path.join(mono_location, "etc/mono/config"),
             os.path.join(path, "modeler", "mxbuild.exe"),
-            "--serve",
+#            "--serve",
             "--enable-call-microflow-from-nanoflow",
             "--enable-native-layout-type",
             "--native-packager",
