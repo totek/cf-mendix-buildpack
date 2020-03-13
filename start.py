@@ -540,7 +540,7 @@ def get_certificate_authorities():
                 files.append(location)
                 n += 1
                 logging.info("Add certificate authorities in Java cacerts.")
-                os.system('.local/usr/lib/jvm/AdoptOpenJDK-jdk-11.0.3-AdoptOpenJDK-x64/bin/keytool -import -trustcacerts -file .local/certificate_authorities.%d.crt -keystore .local/usr/lib/jvm/AdoptOpenJDK-jre-11.0.3-AdoptOpenJDK-x64/lib/security/cacerts -storepass changeit -alias extCert%d -noprompt' % n)
+                os.system('.local/usr/lib/jvm/*jdk*/bin/keytool -import -trustcacerts -file .local/certificate_authorities.%d.crt -keystore .local/usr/lib/jvm/*jre*/lib/security/cacerts -storepass changeit -alias extCert%d -noprompt' % n)
         config["CACertificates"] = ",".join(files)
     return config
 
