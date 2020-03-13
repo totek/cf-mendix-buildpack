@@ -538,8 +538,8 @@ def get_certificate_authorities():
                 with open(location, "w") as output_file:
                     output_file.write(ca)
                 files.append(location)
-                logging.info("Add certificate authorities in Java cacerts.")
-                os.system('.local/usr/lib/jvm/*jdk*/bin/keytool -import -trustcacerts -file .local/certificate_authorities.%d.crt -keystore .local/usr/lib/jvm/*jre*/lib/security/cacerts -storepass changeit -alias extCert%d -noprompt' % (n, n))
+                logger.info("Adding certificate authorities extcert%d in Java cacerts." % n)
+                os.system('.local/usr/lib/jvm/*jdk*/bin/keytool -import -trustcacerts -file .local/certificate_authorities.%d.crt -keystore .local/usr/lib/jvm/*jre*/lib/security/cacerts -storepass changeit -alias extcert%d -noprompt' % (n, n))
                 n += 1
         config["CACertificates"] = ",".join(files)
     return config
